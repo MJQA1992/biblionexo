@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>BiblioNexo — Iniciar Sesión</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <div><strong>BiblioNexo</strong> · Sistema de Gestión Bibliotecaria (Sprint 1 MVP)</div>
+</header>
+<main>
+    <div class="card" style="max-width: 420px; margin: 3rem auto;">
+        <h2>Iniciar sesión en BiblioNexo</h2>
+        <div id="error-msg" class="alert-err" style="display:none;"></div>
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div style="margin-bottom: 0.85rem;">
+                <label>Correo electrónico</label><br>
+                <input type="email" id="correo" required value="biblioteca@demo.local" style="width:95%;">
+            </div>
+            <div style="margin-bottom: 1.1rem;">
+                <label>Contraseña</label><br>
+                <input type="password" id="password" required value="DemoBiblioteca2026!" style="width:95%;">
+            </div>
+            <button type="submit" style="width:100%;">Iniciar Sesión</button>
+        </form>
+        <p style="font-size: 0.85rem; color: #475569; margin-top: 1rem; text-align: center;">
+            Demo Bibliotecario: <code>biblioteca@demo.local</code> / <code>DemoBiblioteca2026!</code>
+        </p>
+    </div>
+</main>
+<script>
+    const API_URL = window.BIBLIONEXO_API_URL || "http://127.0.0.1:8000/api/v1";
+
+    async function handleLogin(event) {
+        event.preventDefault();
+        const correo = document.getElementById('correo').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('error-msg');
+        errorDiv.style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ correo, password })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.detail || 'Credenciales inválidas');
+            }
+            localStorage.setItem('biblionexo_user', JSON.stringify(data));
+            window.location.href = 'dashboard.html';
+        } catch (err) {
+            errorDiv.innerText = err.message || "Error al conectar con el servidor.";
+            errorDiv.style.display = 'block';
+        }
+    }
+</script>
+</body>
+</html>

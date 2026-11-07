@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    container_name: biblionexo-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - SESSION_SECRET=docker_dev_secret_biblionexo_2026
+      - DEMO_PASSWORD=DemoBiblioteca2026!
+  frontend:
+    build: ./frontend
+    container_name: biblionexo-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend

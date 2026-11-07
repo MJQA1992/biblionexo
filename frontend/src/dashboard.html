@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>BiblioNexo — Panel Operativo (Sprint 1 MVP)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <div><strong>BiblioNexo</strong> · Panel de Gestión (Sprint 1 MVP)</div>
+    <div>
+        <span id="user-badge" style="margin-right: 1rem; font-size: 0.92rem;"></span>
+        <button onclick="logout()" style="background:#dc2626; padding:0.35rem 0.75rem;">Cerrar Sesión</button>
+    </div>
+</header>
+<main>
+    <div id="global-ok" class="alert-ok" style="display:none;"></div>
+    <div id="global-err" class="alert-err" style="display:none;"></div>
+
+    <div class="nav-tabs">
+        <button class="active" onclick="switchTab(event, 'sec-disponibilidad')">1. Disponibilidad</button>
+        <button onclick="switchTab(event, 'sec-prestamos')">2. Préstamos y Devoluciones</button>
+        <button onclick="switchTab(event, 'sec-libros')">3. Libros e Inventario</button>
+        <button onclick="switchTab(event, 'sec-usuarios')">4. Usuarios</button>
+        <button onclick="switchTab(event, 'sec-vencimientos')">5. Vencimientos</button>
+        <button onclick="switchTab(event, 'sec-sanciones')">6. Sanciones</button>
+    </div>
+
+    <!-- 1. DISPONIBILIDAD (HU: Consultar disponibilidad) -->
+    <section id="sec-disponibilidad" class="tab-section active">
+        <div class="card">
+            <h2>Consultar Disponibilidad de Ejemplares</h2>
+            <form onsubmit="buscarDisponibilidad(event)" class="form-grid">
+                <div>
+                    <label>Título o ISBN</label><br>
+                    <input type="text" id="disp-criterio" placeholder="Ej. DEMO-001" required>
+                </div>
+                <div>
+                    <button type="submit">Buscar disponibilidad</button>
+                </div>
+            </form>
+        </div>
+        <div id="disp-resultados"></div>
+    </section>
+
+    <!-- 2. PRÉSTAMOS Y DEVOLUCIONES (HU: Agregar préstamo, Registrar devolución, Consultar préstamos) -->
+    <section id="sec-prestamos" class="tab-section">
+        <div class="card">
+            <h2>Agregar Préstamo</h2>
+            <form onsubmit="crearPrestamo(event)" class="form-grid">
+                <div><label>ID Usuario (Lector)</label><br><input type="number" id="prest-usuario" required></div>
+                <div><label>ID Ejemplar</label><br><input type="number" id="prest-ejemplar" required></div>
+                <div><label>Fecha Límite</label><br><input type="date" id="prest-limite" required></div>
+                <div><button type="submit">Registrar Préstamo</button></div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Registrar Devolución</h2>
+            <form onsubmit="devolverPrestamo(event)" class="form-grid">
+                <div><label>ID Préstamo</label><br><input type="number" id="dev-prestamo" required></div>
+                <div><button type="submit">Confirmar Devolución</button></div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Consultar Préstamos</h2>
+            <div style="margin-bottom:0.75rem;">
+                <label><input type="checkbox" id="prest-solo-activos" onchange="cargarPrestamos()"> Mostrar solo préstamos activos</label>
+                <button onclick="cargarPrestamos()" style="margin-left:1rem;">Actualizar</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Ejemplar / Libro</th>
+                        <th>Fecha Préstamo</th>
+                        <th>Fecha Límite</th>
+                        <th>Devolución / Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-prestamos"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 3. LIBROS E INVENTARIO (HU: Agregar libros, Consultar libros) -->
+    <section id="sec-libros" class="tab-section">
+        <div class="card">
+            <h2>Agregar Libro e Inventario de Ejemplares</h2>
+            <form onsubmit="crearLibro(event)" class="form-grid">
+                <div><label>ISBN</label><br><input type="text" id="lib-isbn" required></div>
+                <div><label>Título</label><br><input type="text" id="lib-titulo" required></div>
+                <div><label>Autor</label><br><input type="text" id="lib-autor" required></div>
+                <div><label>Categoría</label><br><input type="text" id="lib-categoria" required></div>
+                <div><label>Ejemplares</label><br><input type="number" id="lib-cantidad" value="1" min="1" max="50" required></div>
+                <div><label>Ubicación</label><br><input type="text" id="lib-ubicacion" value="Sala General" required></div>
+                <div><button type="submit">Guardar Libro</button></div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Consultar Catálogo de Libros</h2>
+            <form onsubmit="filtrarLibros(event)" class="form-grid" style="margin-bottom:1rem;">
+                <div><input type="text" id="lib-q" placeholder="Buscar por título, autor o ISBN"></div>
+                <div><button type="submit">Filtrar</button></div>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ISBN</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Categoría</th>
+                        <th>Ejemplares</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-libros"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 4. USUARIOS (HU: Agregar usuario, Consultar usuario) -->
+    <section id="sec-usuarios" class="tab-section">
+        <div class="card">
+            <h2>Agregar Usuario</h2>
+            <form onsubmit="crearUsuario(event)" class="form-grid">
+                <div><label>Nombre completo</label><br><input type="text" id="usu-nombre" required></div>
+                <div><label>Correo</label><br><input type="email" id="usu-correo" required></div>
+                <div>
+                    <label>Rol</label><br>
+                    <select id="usu-rol">
+                        <option value="Lector">Lector</option>
+                        <option value="Bibliotecario">Bibliotecario</option>
+                    </select>
+                </div>
+                <div><label>Contraseña inicial</label><br><input type="password" id="usu-password" required></div>
+                <div><button type="submit">Registrar Usuario</button></div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Consultar Usuarios</h2>
+            <form onsubmit="filtrarUsuarios(event)" class="form-grid" style="margin-bottom:1rem;">
+                <div><input type="text" id="usu-q" placeholder="Nombre o correo"></div>
+                <div><button type="submit">Buscar</button></div>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-usuarios"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 5. VENCIMIENTOS (HU: Consultar vencimiento) -->
+    <section id="sec-vencimientos" class="tab-section">
+        <div class="card">
+            <h2>Consultar Vencimientos <small id="venc-fecha-corte"></small></h2>
+            <button onclick="cargarVencimientos()" style="margin-bottom:0.75rem;">Actualizar Vencimientos</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Préstamo</th>
+                        <th>Lector</th>
+                        <th>Libro / Ejemplar</th>
+                        <th>Fecha Préstamo</th>
+                        <th>Fecha Límite</th>
+                        <th>Días de Atraso</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-vencimientos"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 6. SANCIONES (HU: Agregar sanción, Consultar sanciones) -->
+    <section id="sec-sanciones" class="tab-section">
+        <div class="card">
+            <h2>Agregar Sanción Administrativa</h2>
+            <form onsubmit="crearSancion(event)" class="form-grid">
+                <div><label>ID Usuario</label><br><input type="number" id="sanc-usuario" required></div>
+                <div><label>ID Préstamo (opcional)</label><br><input type="number" id="sanc-prestamo"></div>
+                <div><label>Motivo</label><br><input type="text" id="sanc-motivo" required></div>
+                <div><label>Suspendido hasta</label><br><input type="date" id="sanc-fin" required></div>
+                <div><button type="submit">Aplicar Sanción</button></div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Consultar Sanciones</h2>
+            <button onclick="cargarSanciones()" style="margin-bottom:0.75rem;">Actualizar Sanciones</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Préstamo Asociado</th>
+                        <th>Motivo</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-sanciones"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
