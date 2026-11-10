@@ -127,8 +127,8 @@
         <div class="card">
             <h2>Agregar Usuario</h2>
             <form onsubmit="crearUsuario(event)" class="form-grid">
-                <div><label>Nombre completo</label><br><input type="text" id="usu-nombre" required></div>
-                <div><label>Correo</label><br><input type="email" id="usu-correo" required></div>
+                <div><label>Nombre completo</label><br><input type="text" id="usu-nombre" maxlength="120" required></div>
+                <div><label>Correo</label><br><input type="email" id="usu-correo" maxlength="120" required></div>
                 <div>
                     <label>Rol</label><br>
                     <select id="usu-rol">
@@ -136,7 +136,7 @@
                         <option value="Bibliotecario">Bibliotecario</option>
                     </select>
                 </div>
-                <div><label>Contraseña inicial</label><br><input type="password" id="usu-password" required></div>
+                <div><label>Contraseña inicial</label><br><input type="password" id="usu-password" minlength="8" placeholder="Mínimo 8 caracteres" required></div>
                 <div><button type="submit">Registrar Usuario</button></div>
             </form>
         </div>
