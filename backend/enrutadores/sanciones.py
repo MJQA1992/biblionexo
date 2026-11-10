@@ -6,7 +6,7 @@ from app.database import get_db
 from app.models import Usuario
 from app.schemas import SancionCreate, SancionCreateRequest
 from app.security import require_bibliotecario
-from app.services.sanciones_service import (
+from reglas_negocio.sanciones_service import (
     consultar_vencimientos,
     agregar_sancion,
     consultar_sanciones,

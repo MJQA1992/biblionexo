@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config import SESSION_SECRET
 from app.database import Base, engine
-from app.routers import auth, usuarios, libros, prestamos, sanciones
+from enrutadores import auth, usuarios, libros, prestamos, sanciones
 
 Base.metadata.create_all(bind=engine)
 
