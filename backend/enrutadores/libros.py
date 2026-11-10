@@ -5,7 +5,7 @@ from app.database import get_db
 from app.models import Usuario
 from app.schemas import LibroCreate, LibroCreateRequest, LibroResponse
 from app.security import require_bibliotecario
-from app.services.libros_service import agregar_libro, consultar_libros
+from reglas_negocio.libros_service import agregar_libro, consultar_libros
 
 router = APIRouter(prefix="/api/v1/libros", tags=["Libros"])
 

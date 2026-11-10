@@ -4,7 +4,7 @@ from app.database import get_db
 from app.models import Usuario
 from app.schemas import PrestamoCreate, PrestamoCreateRequest, DevolucionRequest
 from app.security import require_bibliotecario
-from app.services.prestamos_service import (
+from reglas_negocio.prestamos_service import (
     consultar_disponibilidad,
     agregar_prestamo,
     registrar_devolucion,

@@ -5,7 +5,7 @@ from app.database import get_db
 from app.models import Usuario
 from app.schemas import UsuarioCreate, UsuarioCreateRequest, UsuarioResponse
 from app.security import require_bibliotecario
-from app.services.usuarios_service import crear_usuario, consultar_usuarios
+from reglas_negocio.usuarios_service import crear_usuario, consultar_usuarios
 
 router = APIRouter(prefix="/api/v1/usuarios", tags=["Usuarios"])
 
