@@ -1,7 +1,7 @@
 # BiblioNexo — Sprint 1 MVP (Arquitectura Desacoplada Backend REST + Frontend Vistas)
 
 Sistema Web de Gestión de Catálogo y Circulación Bibliotecaria (Equipo 57).
-Reestructura el **MVP del Sprint 1 completo** (las 11 historias del Release 1 + Autenticación y Autorización por Rol + Servicios de Dominio + Pruebas + Diagramas C4) bajo la **arquitectura de 2 contenedores (`backend/` + `frontend/`)**.
+Reestructura el **MVP del Sprint 1 completo** (las 11 historias del Release 1 + Autenticación y Autorización por Rol + Servicios de Dominio) bajo la **arquitectura de 2 contenedores (`backend/` + `frontend/`)**.
 
 ## Estructura del Proyecto
 - `backend/`: API REST modular en FastAPI + SQLAlchemy + SQLite (`app/models.py`, `reglas_negocio/`, `enrutadores/`, `app/seed.py`).
