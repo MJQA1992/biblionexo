@@ -1,4 +1,13 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!--
+    dashboard.html — Panel operativo de BiblioNexo (solo rol Bibliotecario).
+    Estructura:
+      - Cabecera con el usuario autenticado y el botón de cierre de sesión.
+      - Avisos globales de éxito/error (#global-ok, #global-err).
+      - Barra de 6 pestañas; cada una muestra una <section class="tab-section">.
+    Toda la lógica está en app.js; los formularios llaman a sus funciones
+    mediante onsubmit/onclick/onchange y los <tbody> con id se rellenan
+    dinámicamente con los datos de la API.
+-->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +16,7 @@
 </head>
 <body>
 <header>
+    <!-- Cabecera: marca, usuario actual (lo rellena app.js) y cierre de sesión -->
     <div><strong>BiblioNexo</strong> · Panel de Gestión (Sprint 1 MVP)</div>
     <div>
         <span id="user-badge" style="margin-right: 1rem; font-size: 0.92rem;"></span>
@@ -14,10 +24,12 @@
     </div>
 </header>
 <main>
+    <!-- Avisos globales controlados por showFeedback() en app.js -->
     <div id="global-ok" class="alert-ok" style="display:none;"></div>
     <div id="global-err" class="alert-err" style="display:none;"></div>
 
     <div class="nav-tabs">
+        <!-- Navegación por pestañas: switchTab() muestra la sección y carga sus datos -->
         <button class="active" onclick="switchTab(event, 'sec-disponibilidad')">1. Disponibilidad</button>
         <button onclick="switchTab(event, 'sec-prestamos')">2. Préstamos y Devoluciones</button>
         <button onclick="switchTab(event, 'sec-libros')">3. Libros e Inventario</button>
@@ -215,6 +227,7 @@
         </div>
     </section>
 </main>
-<script src="app.js"></script>
+<script src="vistas.js"></script>
+<!-- Lógica del panel (se carga al final, cuando el DOM ya existe) -->
 </body>
 </html>

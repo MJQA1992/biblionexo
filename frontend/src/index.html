@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<!--
+    index.html — Pantalla de inicio de sesión de BiblioNexo.
+    Envía las credenciales a POST /api/v1/login; si son válidas guarda la
+    respuesta (token y datos del usuario) en localStorage con la clave
+    "biblionexo_user" y redirige a dashboard.html.
+    Los campos vienen precargados con la cuenta de demostración.
+-->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -10,8 +17,10 @@
     <div><strong>BiblioNexo</strong> · Sistema de Gestión Bibliotecaria (Sprint 1 MVP)</div>
 </header>
 <main>
+    <!-- Tarjeta del formulario de login -->
     <div class="card" style="max-width: 420px; margin: 3rem auto;">
         <h2>Iniciar sesión en BiblioNexo</h2>
+        <!-- Mensaje de error (oculto hasta que falle el login) -->
         <div id="error-msg" class="alert-err" style="display:none;"></div>
         <form id="login-form" onsubmit="handleLogin(event)">
             <div style="margin-bottom: 0.85rem;">
@@ -30,7 +39,17 @@
     </div>
 </main>
 <script>
+    /** URL base de la API; puede sobrescribirse con window.BIBLIONEXO_API_URL. */
     const API_URL = window.BIBLIONEXO_API_URL || "http://127.0.0.1:8000/api/v1";
+
+
+    /**
+     * Envía el formulario de login a la API.
+     * Éxito: guarda la respuesta en localStorage y abre el panel.
+     * Error: muestra el "detail" de la API o un mensaje de conexión.
+     * @param {SubmitEvent} event Envío del formulario (se evita la recarga).
+     * @returns {Promise<void>}
+     */
 
     async function handleLogin(event) {
         event.preventDefault();

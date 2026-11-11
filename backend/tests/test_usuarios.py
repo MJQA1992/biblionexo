@@ -9,12 +9,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.database import Base, get_db
+from app.conexion_bd import Base, get_db
 from app.main import app
-from app.models import Usuario
-from app.schemas import UsuarioCreate
-from app.security import hash_password, verify_password
-from reglas_negocio.usuarios_service import crear_usuario, consultar_usuarios
+from app.entidades_bd import Usuario
+from app.contratos_datos import UsuarioCreate
+from app.seguridad_acceso import hash_password, verify_password
+from reglas_negocio.reglas_usuarios import crear_usuario, consultar_usuarios
 
 PASSWORD = "Clave12345"
 
@@ -64,7 +64,7 @@ def datos(**cambios):
     return UsuarioCreate(**base)
 
 
-# ---------- Reglas de negocio (reglas_negocio/usuarios_service.py) ----------
+# ---------- Reglas de negocio (reglas_negocio/reglas_usuarios.py) ----------
 
 def test_registrar_usuario_valido_normaliza_y_encripta(db):
     u = crear_usuario(db, datos(nombre="  Ana Pérez ", correo="  ANA@Test.Local "))
