@@ -4,8 +4,8 @@ Sistema Web de Gestión de Catálogo y Circulación Bibliotecaria (Equipo 57).
 Reestructura el **MVP del Sprint 1 completo** (las 11 historias del Release 1 + Autenticación y Autorización por Rol + Servicios de Dominio) bajo la **arquitectura de 2 contenedores (`backend/` + `frontend/`)**.
 
 ## Estructura del Proyecto
-- `backend/`: API REST modular en FastAPI + SQLAlchemy + SQLite (`app/models.py`, `reglas_negocio/`, `enrutadores/`, `app/seed.py`).
-- `frontend/`: Interfaz web desacoplada (`src/index.html`, `src/dashboard.html`, `src/app.js`, `src/styles.css`) servida con Nginx o cualquier servidor estático, con las vistas para las **11 historias de usuario del Sprint 1**.
+- `backend/`: API REST modular en FastAPI + SQLAlchemy + SQLite (`app/entidades_bd.py`, `app/contratos_datos.py`, `app/seguridad_acceso.py`, `reglas_negocio/`, `enrutadores/`, `app/poblador_datos.py`) y pruebas (`tests/test_usuarios.py`).
+- `frontend/`: Interfaz web desacoplada (`src/index.html`, `src/dashboard.html`, `src/controlador_vista.js`, `src/styles.css`) servida con Nginx o cualquier servidor estático, con las vistas para las **11 historias de usuario del Sprint 1**.
 
 ## Historias Implementadas (Release 1 — 11 Historias)
 1. **Préstamos:** Consultar disponibilidad (`GET /api/v1/disponibilidad`), Agregar préstamo (`POST /api/v1/prestamos`), Registrar devolución (`POST /api/v1/prestamos/devolver`), Consultar préstamos (`GET /api/v1/prestamos`).
@@ -19,7 +19,7 @@ Reestructura el **MVP del Sprint 1 completo** (las 11 historias del Release 1 + 
 cd backend
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m app.seed
+.venv/bin/python -m app.poblador_datos
 .venv/bin/python -m uvicorn app.main:app --reload --port 8000
 ```
 *(En Windows PowerShell usa `.\.venv\Scripts\python.exe`)*
@@ -37,5 +37,5 @@ Abre `http://127.0.0.1:8080/index.html` e inicia sesión con:
 ### 3. Ejecutar Pruebas Automatizadas
 ```bash
 cd backend
-pytest -q
+.venv/bin/pytest -q
 ```

@@ -2,7 +2,7 @@
 
 Uso desde ``backend/``::
 
-    python -m app.seed
+    python -m app.poblador_datos
 
 Solo actúa si la tabla de usuarios está vacía (operación idempotente). Crea:
     - 2 usuarios: ``biblioteca@demo.local`` (Bibliotecario) y
